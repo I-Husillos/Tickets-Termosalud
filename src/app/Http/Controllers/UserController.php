@@ -21,44 +21,43 @@ class UserController
     //recibir notificaciones (Ticket recibe un comentario, Ticket cambia de estado)
     //validar resolucion, si no se valida se pasa de resuelta a pendiente
 
-    public function showRegisterForm()
+    public function showLoginForm()
     {
-        return view('users.login');
+        return view('users.userform');
     }
 
 
-    public function registered(Request $request)
+    public function login(Request $request)
     {
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|unique:users',
             'password' => 'required|string|max:255',
         ]);
 
-        $user = User::where('email', $validated['email']) -> first();
+        $credentials = $request->only('email','password');
 
-        if($user)
+        if(Auth::guard('user') -> attempt($credentials))
         {
-            Auth::login();
-            return redirect()->route('tickets.show')->with('success', 'Iniciado sesión correctamente');
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-            $newUser = User::create($validated);
-            Auth::login($newUser);
-
-            return redirect()->route('tickets.show')->with('success', 'Usuario registrado');
+            return redirect() -> route('login');
         }
+    }
 
+    public function dashboard()
+    {
+        $user = Auth::guard('user') -> user();
+
+        $tickets = $user->tickets;
+
+        return view('user.dashboard', compact('tickets'));
     }
     
     public function logOut()
     {
-        Auth::logout();
+        Auth::guard('user')->logout();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
-
 
 
     public function addUserTicket(Request $request)
@@ -81,23 +80,26 @@ class UserController
 
         return redirect()->route('tickets.show')->with('success', 'Datos añadidos');
     }
+
+
+
     
 
 
-    public function showUserTickets($id)
-    {
-        $userId =  Auth::id();
+    // public function showUserTickets($id)
+    // {
+    //     $userId =  Auth::id();
 
-        $tickets = Ticket::where('user_id', $userId)->get();
-        return view('tickets.show', compact('tickets'));
-    }
+    //     $tickets = Ticket::where('user_id', $userId)->get();
+    //     return view('tickets.show', compact('tickets'));
+    // }
 
 
 
-    public function searchTicket(Request $request)
-    {
-        $ticket = Ticket::find($request->ticket_id);
-        return view('tickets.ticket', compact('ticket'));
-    }
+    // public function searchTicket(Request $request)
+    // {
+    //     $ticket = Ticket::find($request->ticket_id);
+    //     return view('tickets.ticket', compact('ticket'));
+    // }
 
 }
