@@ -17,7 +17,6 @@
             <nav>
                 <a href="{{ route('tickets.show') }}" class="nav-link">Inicio</a>
                 <a href="{{ route('tickets.add') }}" class="nav-link">Crear Ticket</a>
-                <!-- Puedes agregar más enlaces o menús aquí -->
             </nav>
         </div>
     </header>
