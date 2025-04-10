@@ -16,8 +16,6 @@ Route::post('register', [UserController::class, 'register']);
 
 
 Route::middleware('auth:user')->group(function() {
-    Route::get('dashboard', [UserController::class, 'dashboard'])->name('users.dashboard');
-
     Route::get('tickets', [TicketController::class, 'showAll']) -> name('tickets.index');
     Route::get('tickets/create', [TicketController::class, 'create']) -> name('tickets.create');
     Route::post('tickets', [TicketController::class, 'store']) -> name('tickets.store');
@@ -31,12 +29,17 @@ Route::middleware('auth:user')->group(function() {
 
 
 
-
-
-
-
-
-
 Route::get('/admin/login', [AdminController::class, 'showLoginForm']) -> name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login']) -> name('admin.login.submit');
+
+Route::middleware('auth:admin')->group(function() {
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('tickets', [AdminController::class, 'manageTickets'])->name('admin.manage.tickets');
+    Route::get('tickets/{ticket}', [AdminController::class, 'viewTicket'])->name('admin.view.ticket');
+    Route::patch('tickets/{ticket}/update', [AdminController::class, 'updateTicketStatus'])->name('admin.update.ticket');
+    Route::post('tickets/{ticket}/assign', [AdminController::class, 'assignTicket'])->name('admin.assign.ticket');
+    Route::post('logout', [AdminController::class, 'logOut'])->name('admin.logout');
+});
+
+
 

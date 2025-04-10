@@ -18,4 +18,10 @@
         <button type="submit" class="btn btn-primary mt-4">Iniciar Sesión</button>
     </form>
 </div>
+<div class="text-center mt-3">
+        <p>¿No tienes una cuenta? <a href="{{ route('register') }}">Regístrate aquí</a></p>
+</div>
+<div class="text-center mt-3">
+    <button type="button" onclick="window.location.href='{{ route('home') }}';" class="back-button">Volver a Inicio</button>
+</div>
 @endsection

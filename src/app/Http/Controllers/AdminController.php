@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
@@ -11,27 +12,15 @@ use Illuminate\Support\Facades\Hash;
 class AdminController
 {
 
-    /*
-    Iniciar sesión en panel separado
-    Ver todos los tickets
-    Filtrar tickets por estado, prioridad, tipo
-    Comentar tickets
-    Actualizar tickets (estado, prioridad,...)
-    ○​ Transiciones permitidas:
-    ○​ nuevo → en curso
-    ○​ en curso → pendiente | resuelto
-    ○​ pendiente → en curso
-    ○​ resuelto → cerrado
-        ●​ Asignarse tickets o reasignarlos a otros administradores
-        ●​ Cerrar ticket
-        ●​ Recibir notificaciones
-    ○​ Creación de ticket
-    ○​ Ticket asignado recibe un comentario
-    */
-
     public function showLoginForm()
     {
-        return view('backoffice.adminform');
+        return view('frontoffice.auth.adminform');
+    }
+
+    public function dashboard()
+    {
+        $tickets = Ticket::all();
+        return view('backoffice.admin.dashboard', compact('tickets'));
     }
 
 
@@ -39,7 +28,7 @@ class AdminController
     {
 
         $validated = $request->validate([
-            'email' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|max:255',
             'password' => 'required|string|max:255',
         ]);
 
@@ -49,29 +38,82 @@ class AdminController
 
         $user = Admin::where('email', $validated['email']) -> first();
 
-        if($user)
-        {
-            Auth::login();
-            return redirect()->route('tickets.show')->with('success', 'Iniciado sesión correctamente');
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
-            $newUser = Admin::create($validated);
-            Auth::login($newUser);
-
-            return redirect()->route('tickets.show')->with('success', 'Usuario registrado');
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->route('admin.dashboard')->with('success', 'Inicio de sesión exitoso.');
         }
 
+        return back()->withErrors(['email' => 'Credenciales incorrectas.']);
+    
     }
 
 
-    
 
-
-    public function dashboard()
+    public function viewTicket(Ticket $tickets)
     {
-        return view('admin.dashboard');
+        return view('backoffice.admin.viewtickets', compact('tickets'));
     }
     
+
+    public function manageTickets()
+    {
+        $tickets = Ticket::all();
+        return view('backoffice.admin.managetickets', compact('tickets'));
+    }
+
+
+    public function manageUsers()
+    {
+        $users = User::all();
+        return view('backoffice.admin.manageusers', compact('users'));
+    }
+
+
+    public function filterTickets(Request $request)
+    {
+        $query = Ticket::query();
+
+        if($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if($request->filled('priority')){
+            $query->where('priority', $request->piority);
+        }
+
+        if($request->filled('type')){
+            $query->where('type', $request->type);
+        }
+
+        $tickets = $query->get();
+        return view('backoffice.admin.managetickets', compact('tickets'));
+    }
+
+
+    public function assignTicket(Request $request, Ticket $ticket)
+    {
+        $validated = $request->validate([
+            'admin'=>'required|exist:admins,id'
+        ]);
+
+
+        $ticket->update(['admin_id' => $validated['admin_id']]);
+
+        return redirect() -> route('admin.manage.tickets')->with('success', 'Ticket asignado correctamente.');
+    }
+
+
+    public function updateTicketStatus(Request $request, Ticket $ticket)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:new,in_progress,pending,resolved,closed',
+            'priority' => 'nullable|in:low,medium,high,critical',
+        ]);
+
+        $ticket->update($validated);
+
+        return redirect() -> route('admin.manage.tickets')->with('success', 'Ticket asignado correctamente.');
+    }
+
 
     public function logout()
     {

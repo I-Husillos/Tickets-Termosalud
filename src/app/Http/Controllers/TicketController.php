@@ -11,7 +11,7 @@ class TicketController
     
     public function showAll()
     {
-        $tickets = Ticket::all();
+        $tickets = Auth::guard('user')->user()->tickets;
         return view('backoffice.user.tickets.index', compact('tickets'));
     }
 

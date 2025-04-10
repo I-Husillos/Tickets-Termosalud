@@ -26,4 +26,7 @@
         <button type="submit" class="btn btn-primary mt-4">Registrarse</button>
     </form>
 </div>
+<div class="text-center mt-3">
+    <a href="{{ route('home') }}" class="btn btn-secondary">Volver al Inicio</a>
+</div>
 @endsection

@@ -30,7 +30,7 @@ class UserController
 
         if(Auth::guard('user') -> attempt($credentials))
         {
-            return redirect() -> route('users.dashboard');
+            return redirect() -> route('tickets.index');
         }
     }
 
@@ -55,7 +55,7 @@ class UserController
 
         Auth::guard('user')->login($user);
 
-        return redirect()->route('users.dashboard');
+        return redirect()->route('tickets.index');
     }
 
 

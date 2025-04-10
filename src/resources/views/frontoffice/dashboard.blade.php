@@ -1,19 +1,24 @@
-@extends('layouts.frontoffice') <!-- Utiliza tu layout base para la interfaz del usuario -->
+@extends('layouts.frontoffice')
 
 @section('title', 'Dashboard')
 
 @section('content')
 <div class="container mt-5">
-    <!-- Bienvenida al usuario -->
     <h2 class="text-center">Bienvenido, {{ Auth::user()->name }}</h2>
 
-    <!-- Enlace para crear un nuevo ticket -->
+
+    <div class="d-flex justify-content-end mt-4">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+        </form>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
         <h3>Tus Tickets</h3>
         <a href="{{ route('tickets.create') }}" class="btn btn-primary">Crear Nuevo Ticket</a>
     </div>
 
-    <!-- Mostrar lista de tickets del usuario -->
     @if ($tickets->isEmpty())
         <div class="alert alert-info">No tienes tickets creados. Haz clic en "Crear Nuevo Ticket" para comenzar.</div>
     @else
@@ -56,3 +61,4 @@
     @endif
 </div>
 @endsection
+

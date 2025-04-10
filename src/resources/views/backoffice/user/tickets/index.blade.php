@@ -5,6 +5,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="text-center">Mis Tickets</h2>
+    
 
     <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
         <h3>Lista de Tickets</h3>
@@ -53,5 +54,13 @@
         </table>
 
     @endif
+
+    <div class="d-flex justify-content-end mt-4">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+        </form>
+    </div>
 </div>
 @endsection
+
