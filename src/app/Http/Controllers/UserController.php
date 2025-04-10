@@ -30,8 +30,12 @@ class UserController
 
         if(Auth::guard('user') -> attempt($credentials))
         {
-            return redirect() -> route('tickets.index');
+            return redirect()->route('user.tickets.index');
         }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales no son válidas.',
+        ])->withInput();
     }
 
 
@@ -55,7 +59,7 @@ class UserController
 
         Auth::guard('user')->login($user);
 
-        return redirect()->route('tickets.index');
+        return redirect()->route('user.tickets.index');
     }
 
 

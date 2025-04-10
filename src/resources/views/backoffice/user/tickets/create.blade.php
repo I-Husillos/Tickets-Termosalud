@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mt-5">
     <h2>Crear Nuevo Ticket</h2>
-    <form method="POST" action="{{ route('tickets.store') }}">
+    <form method="POST" action="{{ route('user.tickets.store') }}">
         @csrf
         
         <div class="form-group mt-3">

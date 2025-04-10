@@ -9,7 +9,7 @@
 
     <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
         <h3>Lista de Tickets</h3>
-        <a href="{{ route('tickets.create') }}" class="btn btn-primary">Crear Nuevo Ticket</a>
+        <a href="{{ route('user.tickets.create') }}" class="btn btn-primary">Crear Nuevo Ticket</a>
     </div>
 
     @if ($tickets->isEmpty())
@@ -46,7 +46,7 @@
                         <td>{{ ucfirst($ticket->priority) }}</td>
                         <td>{{ $ticket->created_at->format('d/m/Y') }}</td>
                         <td>
-                            <a href="{{ route('tickets.show', $ticket->id) }}" class="btn btn-info btn-sm">Ver Detalles</a>
+                            <a href="{{ route('user.tickets.show', $ticket->id) }}" class="btn btn-info btn-sm">Ver Detalles</a>
                         </td>
                     </tr>
                 @endforeach

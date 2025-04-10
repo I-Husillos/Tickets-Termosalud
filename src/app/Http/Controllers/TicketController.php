@@ -36,7 +36,7 @@ class TicketController
         Ticket::create($validated);
 
 
-        return redirect()->route('tickets.index')->with('success', 'Ticket creado con éxito.');
+        return redirect()->route('user.tickets.index')->with('success', 'Ticket creado con éxito.');
     }
 
 

@@ -29,7 +29,7 @@
         </form>
     @endif
 
-    <a href="{{ route('tickets.index') }}" class="btn btn-secondary mt-3">Volver a la Lista</a>
+    <a href="{{ route('user.tickets.index') }}" class="btn btn-secondary mt-3">Volver a la Lista</a>
 </div>
 @endsection
 

@@ -48,9 +48,10 @@ class AdminController
 
 
 
-    public function viewTicket(Ticket $tickets)
+    public function viewTicket(Ticket $ticket)
     {
-        return view('backoffice.admin.viewtickets', compact('tickets'));
+        $admins = Admin::all();
+        return view('backoffice.admin.viewtickets', compact('ticket', 'admins'));
     }
     
 
@@ -92,11 +93,11 @@ class AdminController
     public function assignTicket(Request $request, Ticket $ticket)
     {
         $validated = $request->validate([
-            'admin'=>'required|exist:admins,id'
+            'admin'=>'required|exists:admins,id'
         ]);
 
 
-        $ticket->update(['admin_id' => $validated['admin_id']]);
+        $ticket->update(['admin_id' => $validated['admin']]);
 
         return redirect() -> route('admin.manage.tickets')->with('success', 'Ticket asignado correctamente.');
     }
