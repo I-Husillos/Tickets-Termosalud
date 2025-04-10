@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('type', ['bug', 'improvement', 'request']);
             $table->enum('priority', ['low', 'medium', 'high', 'critical']);
             $table->enum('status', ['new', 'in_progress', 'pending', 'resolved', 'closed']);
-            $table->integer('user_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('admin_id')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TicketController
@@ -11,15 +12,41 @@ class TicketController
     public function showAll()
     {
         $tickets = Ticket::all();
-        return view('tickets.ticket', compact('tickets'));
+        return view('backoffice.user.tickets.index', compact('tickets'));
     }
 
 
-
-    public function showEditForm($id)
+    public function create()
     {
-        $ticket = Ticket::findOrFail($id);
-        return view('tickets.edit', compact('ticket'));
+        return view('backoffice.user.tickets.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'type' => 'required|in:bug,improvement,request',
+            'priority' => 'required|in:low,medium,high,critical',
+            'status' => 'required|in:new,in_progress,pending,resolved,closed'
+        ]);
+
+        $validated['user_id'] = auth('user')->id();
+
+        Ticket::create($validated);
+
+
+        return redirect()->route('tickets.index')->with('success', 'Ticket creado con éxito.');
+    }
+
+
+    public function show(Ticket $ticket)
+    {
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('backoffice.user.tickets.show', compact('ticket'));
     }
 
 
@@ -30,63 +57,17 @@ class TicketController
     }
 
 
-
-    public function showForm()
+    public function validateResolution(Request $request, Ticket $ticket)
     {
-        return view('tickets.create');
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $status = $request->input('status') === 'resolved' ? 'resolved' : 'pending';
+        $ticket->update(['status' => $status]);
+
+        return redirect()->route('tickets.index')->with('success', 'Estado del ticket actualizado.');
     }
 
 
-    public function addTicket(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'type' => 'required|in:bug,improvement,request',
-            'priority' => 'required|in:low,medium,high,critical',
-            'status' => 'required|in:new,in_progress,pending,resolved,closed',
-            'user_id' => 'required|integer',
-            'admin_id' => 'nullable|integer',
-            'resolved_at' => 'nullable|date'
-        ]);
-
-
-        Ticket::create($validated);
-
-
-        return redirect()->route('tickets.show')->with('success', 'Datos añadidos');
-    }
-
-
-
-    
-    public function updated(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'priority' => 'required|in:low,medium,high',
-            'status' => 'required|in:new,in_progress,resolved,closed',
-        ]);
-
-        $ticket = Ticket::findOrFail($id);
-
-        $ticket->update($validated);
-        
-
-        return redirect()->route('tickets.show')->with('succes', 'Datos actualizados');
-    }
-
-
-
-
-
-    public function deleted($id)
-    {
-        $ticket = Ticket::findOrFail($id);
-
-        $ticket -> delete();
-
-        return redirect()->route('tickets.show')->with('succes', 'Datos eliminados');
-    }
 }

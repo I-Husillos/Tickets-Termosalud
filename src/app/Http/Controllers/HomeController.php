@@ -8,7 +8,7 @@ class HomeController
 {
     public function showOptions()
     {
-        return view('login');
+        return view('home');
     }
 
 }

@@ -31,7 +31,7 @@ class AdminController
 
     public function showLoginForm()
     {
-        return view('admins.adminform');
+        return view('backoffice.adminform');
     }
 
 
@@ -62,6 +62,9 @@ class AdminController
         }
 
     }
+
+
+    
 
 
     public function dashboard()
