@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('title');
             $table->string('description');
             $table->enum('type', ['bug', 'improvement', 'request']);
             $table->enum('priority', ['low', 'medium', 'high', 'critical']);
             $table->enum('status', ['new', 'in_progress', 'pending', 'resolved', 'closed']);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->integer('admin_id')->nullable();
+            $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('set null');
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
         });
