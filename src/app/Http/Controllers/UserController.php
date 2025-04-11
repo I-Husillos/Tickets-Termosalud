@@ -63,6 +63,8 @@ class UserController
     }
 
 
+    public 
+
     
     public function dashboard()
     {
