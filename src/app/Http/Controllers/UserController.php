@@ -77,7 +77,7 @@ class UserController
     {
         Auth::guard('user')->logout();
 
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
     
 }

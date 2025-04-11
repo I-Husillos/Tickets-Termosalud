@@ -27,7 +27,8 @@
     </form>
 
     <div class="text-center mt-4">
-        <a href="{{ route('home') }}" class="btn btn-secondary">Volver al Inicio</a>
+        <a href="{{ route('login') }}" class="btn btn-secondary">Volver al Inicio</a>
     </div>
 </div>
 @endsection
+
