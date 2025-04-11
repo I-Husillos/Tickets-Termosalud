@@ -63,7 +63,12 @@ class UserController
     }
 
 
-    public 
+    public function showNotificationsView()
+    {
+        $notifications = Auth::guard('user')->user()->notifications;
+
+        return view('backoffice.user.notifications.viewnotifications', compact('notifications'));
+    }
 
     
     public function dashboard()

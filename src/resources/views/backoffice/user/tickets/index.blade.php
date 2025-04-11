@@ -54,6 +54,7 @@
                 @endforeach
             </tbody>
         </table>
+        <a href="{{ route('user.notifications') }}" class="nav-link">Mis Notificaciones</a>
 
     @endif
 

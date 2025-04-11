@@ -24,6 +24,7 @@ Route::middleware('auth:user')->prefix('user')->group(function() {
 
     Route::post('tickets/{ticket}/validate', [TicketController::class, 'validateResolution'])->name('user.tickets.validate');
 
+    Route::get('notifications', [UserController::class, 'showNotificationsView'])->name('user.notifications');
     
 
     Route::post('logout', [UserController::class, 'logOut'])->name('logout');
