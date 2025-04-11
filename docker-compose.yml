@@ -59,6 +59,16 @@ services:
       - "${DOCKER_PHPMYADMIN_PORT}:80"
     networks:
        - ${DOCKER_NETWORK}
+  servicenpm:
+    container_name: npm-service
+    image: node:latest
+    working_dir: /usr/src/app
+    volumes:
+      - ./src:/usr/src/app
+    command: sh -c "tail -f /dev/null" # mantiene el servicio activo para poder ejecutar npm cuando se requiera
+    networks:
+       - ${DOCKER_NETWORK}
+
 networks:
     red-app:
 

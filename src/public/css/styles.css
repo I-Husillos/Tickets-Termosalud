@@ -1,5 +1,5 @@
 /* Estilos generales */
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
     margin: 0;
@@ -34,10 +34,10 @@ nav a {
 nav a:hover {
     text-decoration: underline;
     color: #ffd700;
-}
+} */
 
 /* Estilos para la tabla de tickets */
-table {
+/* table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -72,10 +72,10 @@ table a {
 table a:hover {
     text-decoration: underline;
     color: #0056b3;
-}
+} */
 
 /* Estilos para los botones */
-button {
+/* button {
     background-color: #28a745;
     color: white;
     border: none;
@@ -88,10 +88,10 @@ button {
 
 button:hover {
     background-color: #218838;
-}
+} */
 
 /* Estilos de los formularios */
-form {
+/* form {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -137,10 +137,10 @@ form button:hover {
 
 form button:active {
     background-color: #004085;
-}
+} */
 
 /* Estilo para el buscador de tickets */
-.search-container {
+/* .search-container {
     text-align: center;
     margin-top: 20px;
 }
@@ -167,10 +167,10 @@ form button:active {
 
 .search-container button:hover {
     background-color: #0056b3;
-}
+}  */
 
 /* Estilo para las alertas */
-.alert {
+/* .alert {
     padding: 15px;
     margin-top: 20px;
     color: rgb(0, 0, 0);
@@ -191,4 +191,4 @@ form button:active {
 
 .alert.warning {
     background-color: #ffc107;
-}
+} */

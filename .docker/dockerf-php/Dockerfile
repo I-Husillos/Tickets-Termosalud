@@ -24,7 +24,7 @@ RUN docker-php-ext-install \
 
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
 COPY ./src /var/www/html
@@ -34,3 +34,4 @@ WORKDIR /var/www/html
 EXPOSE 9000
 
 CMD [ "php", "-S", "0.0.0.0:80", "-t", "/var/www/html/public" ]
+

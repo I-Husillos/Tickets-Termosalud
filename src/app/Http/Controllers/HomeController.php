@@ -8,7 +8,7 @@ class HomeController
 {
     public function showOptions()
     {
-        return view('home');
+        return view('frontoffice.auth.login');
     }
 
 }
