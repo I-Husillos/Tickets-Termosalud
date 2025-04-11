@@ -24,6 +24,7 @@
                     <th>Título</th>
                     <th>Estado</th>
                     <th>Prioridad</th>
+                    <th>Comentarios</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
@@ -44,6 +45,7 @@
                             </span>
                         </td>
                         <td>{{ ucfirst($ticket->priority) }}</td>
+                        <td>{{ $ticket->comments->count() }}</td>
                         <td>{{ $ticket->created_at->format('d/m/Y') }}</td>
                         <td>
                             <a href="{{ route('user.tickets.show', $ticket->id) }}" class="btn btn-info btn-sm">Ver Detalles</a>

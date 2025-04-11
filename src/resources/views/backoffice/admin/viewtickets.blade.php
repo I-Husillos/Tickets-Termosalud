@@ -41,5 +41,53 @@
             <button type="submit" class="btn btn-warning mt-3">Reasignar</button>
         </form>
     </div>
+
+
+    <div class="mt-5">
+        <h4>Comentarios</h4>
+
+        @if ($ticket->comments->isEmpty())
+            <p class="text-muted">No hay comentarios para este ticket.</p>
+        @else
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Autor</th>
+                        <th>Mensaje</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th> <!-- Opcional -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($ticket->comments as $comment)
+                        <tr>
+                            <td>{{ $comment->author->name }}</td>
+                            <td>{{ $comment->message }}</td>
+                            <td>{{ $comment->created_at->format('d/m/Y H:i') }}</td>
+                            <td>
+                                {{-- Botón para eliminar comentario --}}
+                                <form method="POST" action="{{ route('admin.delete.comment', $comment->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+    </div>
+
+    <div class="mt-4">
+        <h5>Añadir un Comentario</h5>
+        <form method="POST" action="{{ route('admin.add.comment', $ticket->id) }}">
+            @csrf
+            <div class="form-group">
+                <textarea name="message" class="form-control" rows="4" placeholder="Escribe tu comentario aquí..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Añadir Comentario</button>
+        </form>
+    </div>
 </div>
 @endsection

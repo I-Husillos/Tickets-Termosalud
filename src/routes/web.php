@@ -4,9 +4,9 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
-//login forms
 Route::get('/', [HomeController::class, 'showOptions']) -> name('home');
 
 Route::get('login', [UserController::class, 'showLoginForm'])->name('login');
@@ -20,6 +20,7 @@ Route::middleware('auth:user')->prefix('user')->group(function() {
     Route::get('tickets/create', [TicketController::class, 'create']) -> name('user.tickets.create');
     Route::post('tickets', [TicketController::class, 'store']) -> name('user.tickets.store');
     Route::get('tickets/{ticket}', [TicketController::class, 'show']) -> name('user.tickets.show');
+    Route::post('tickets/{ticket}/comment', [CommentController::class, 'addComment'])->name('ticket.add.comment');
 
     Route::post('tickets/{ticket}/validate', [TicketController::class, 'validateResolution'])->name('user.tickets.validate');
 
@@ -37,7 +38,10 @@ Route::middleware('auth:admin')->prefix('admin')->group(function() {
     Route::get('tickets/{ticket}', [AdminController::class, 'viewTicket'])->name('admin.view.ticket');
     Route::patch('tickets/{ticket}/update', [AdminController::class, 'updateTicketStatus'])->name('admin.update.ticket');
     Route::post('tickets/{ticket}/assign', [AdminController::class, 'assignTicket'])->name('admin.assign.ticket');
-    Route::post('logout', [AdminController::class, 'logOut'])->name('admin.logout');
+    Route::post('tickets/{ticket}/comment', [CommentController::class, 'addComment'])->name('admin.add.comment');
+    Route::delete('comments/{comment}', [CommentController::class, 'deleteComment'])->name('admin.delete.comment');
+    Route::get('tickets/{ticket}/comments', [CommentController::class, 'viewComments'])->name('admin.view.comments');
+    Route::post('logout', [AdminController::class, 'logout'])->name('admin.logout');
 });
 
 

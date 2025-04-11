@@ -22,12 +22,29 @@
     </div>
 
     @if ($ticket->status === 'resolved')
-        <form method="POST" action="{{ route('tickets.validate', $ticket->id) }}" class="mt-4">
+        <form method="POST" action="{{ route('user.tickets.validate', $ticket->id) }}" class="mt-4">
             @csrf
             <button type="submit" name="status" value="resolved" class="btn btn-success">Validar Resolución</button>
             <button type="submit" name="status" value="pending" class="btn btn-danger">No Validar</button>
         </form>
     @endif
+
+    <div class="mt-4">
+        <h4>Añadir un Comentario</h4>
+        <form method="POST" action="{{ route('ticket.add.comment', $ticket->id) }}">
+            @csrf
+            <div class="form-group">
+                <textarea 
+                    name="message" 
+                    class="form-control" 
+                    rows="4" 
+                    placeholder="Escribe tu comentario aquí..." 
+                    required
+                ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Añadir Comentario</button>
+        </form>
+    </div>
 
     <a href="{{ route('user.tickets.index') }}" class="btn btn-secondary mt-3">Volver a la Lista</a>
 </div>

@@ -5,24 +5,25 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="text-center">Lista de Tickets</h2>
+    <a href="{{ route('admin.login') }}" onclick="return confirm('¿Estás seguro de que deseas cerrar sesión?');">Cerrar Sesión</a>
     <form method="GET" action="{{ route('admin.manage.tickets') }}" class="mt-4">
         <div class="form-row">
             <div class="col">
                 <select name="status" class="form-control">
                     <option value="">Estado</option>
-                    <option value="new">Nuevo</option>
-                    <option value="in_progress">En Curso</option>
-                    <option value="resolved">Resuelto</option>
-                    <option value="closed">Cerrado</option>
+                    <option value="new">New</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
                 </select>
             </div>
             <div class="col">
                 <select name="priority" class="form-control">
                     <option value="">Prioridad</option>
-                    <option value="low">Baja</option>
-                    <option value="medium">Media</option>
-                    <option value="high">Alta</option>
-                    <option value="critical">Crítica</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
                 </select>
             </div>
             <div class="col">
@@ -57,4 +58,5 @@
         </tbody>
     </table>
 </div>
+
 @endsection

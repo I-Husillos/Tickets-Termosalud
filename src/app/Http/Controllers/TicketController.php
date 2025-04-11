@@ -42,6 +42,8 @@ class TicketController
 
     public function show(Ticket $ticket)
     {
+        $ticket = Ticket::with('comments.author')->find($ticket->id);
+
         if ($ticket->user_id !== Auth::id()) {
             abort(403);
         }
@@ -66,7 +68,7 @@ class TicketController
         $status = $request->input('status') === 'resolved' ? 'resolved' : 'pending';
         $ticket->update(['status' => $status]);
 
-        return redirect()->route('tickets.index')->with('success', 'Estado del ticket actualizado.');
+        return redirect()->route('user.tickets.index')->with('success', 'Estado del ticket actualizado.');
     }
 
 

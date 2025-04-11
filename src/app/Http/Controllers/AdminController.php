@@ -55,9 +55,21 @@ class AdminController
     }
     
 
-    public function manageTickets()
+    public function manageTickets(Request $request)
     {
-        $tickets = Ticket::all();
+        $query = Ticket::query();
+
+        if($request->filled('status'))
+        {
+            $query->where('status',$request->status);
+        }
+
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        $tickets = $query->get();
+
         return view('backoffice.admin.managetickets', compact('tickets'));
     }
 
@@ -78,7 +90,7 @@ class AdminController
         }
 
         if($request->filled('priority')){
-            $query->where('priority', $request->piority);
+            $query->where('priority', $request->priority);
         }
 
         if($request->filled('type')){
