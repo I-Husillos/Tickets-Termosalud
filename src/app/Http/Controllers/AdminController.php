@@ -19,8 +19,11 @@ class AdminController
 
     public function dashboard()
     {
+        $admin = Auth::guard('admin')->user();
+        $notifications = $admin->notifications;
         $tickets = Ticket::all();
-        return view('backoffice.admin.dashboard', compact('tickets'));
+        
+        return view('backoffice.admin.dashboard', compact('tickets','notifications'));
     }
 
 

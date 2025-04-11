@@ -74,6 +74,8 @@ services:
     ports:
       - "1025:1025" # puerto SMTP
       - "8025:8025" # interfaz web
+    networks:
+       - ${DOCKER_NETWORK}
 
 networks:
     red-app:

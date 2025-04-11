@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use App\Notifications\TicketCreatedNotification;
 
 class TicketController
 {
@@ -33,7 +36,13 @@ class TicketController
 
         $validated['user_id'] = auth('user')->id();
 
-        Ticket::create($validated);
+        $ticket = Ticket::create($validated);
+
+
+        foreach(Admin::all() as $admin)
+        {
+            $admin->notify(new TicketCreatedNotification($ticket));
+        }
 
 
         return redirect()->route('user.tickets.index')->with('success', 'Ticket creado con éxito.');
@@ -70,6 +79,5 @@ class TicketController
 
         return redirect()->route('user.tickets.index')->with('success', 'Estado del ticket actualizado.');
     }
-
 
 }

@@ -89,5 +89,9 @@
             <button type="submit" class="btn btn-primary mt-3">Añadir Comentario</button>
         </form>
     </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ route('admin.manage.tickets') }}" class="btn btn-secondary">Volver al menú de gestión</a>
+    </div>
 </div>
 @endsection

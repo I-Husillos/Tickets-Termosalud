@@ -29,7 +29,7 @@ class TicketCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail','databse']; // Define los canales por los cuales se enviará la notificación (por correo electronico y ara almacenar la notificación en la base de datos)
+        return ['mail','database']; // Define los canales por los cuales se enviará la notificación (por correo electronico y ara almacenar la notificación en la base de datos)
     }
 
     /**
@@ -39,7 +39,8 @@ class TicketCreatedNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nuevo ticket creado.')
-            ->line('Un nuevo ticket a sido creado con el titulo: ' . $this->ticket->title)
+            ->line('Un nuevo ticket a sido creado por ' . $this->ticket->user)
+            ->line('Titulo del ticket ' . $this->ticket->title)
             ->action('Ver ticket', url('/tickets/' . $this->ticket->id));
     }
 
@@ -49,7 +50,11 @@ class TicketCreatedNotification extends Notification
         return [
             'ticket_id' => $this->ticket->id,
             'title' => $this->ticket->title,
-            'message' => 'A new ticket has been created.'
+            'message'     => 'Se ha creado un nuevo ticket.',
+            'created_by'  => $this->ticket->user->name,
+            'priority'    => $this->ticket->priority,
+            'type'        => $this->ticket->type,
+            'status'      => $this->ticket->status,
         ];
     }
 }
