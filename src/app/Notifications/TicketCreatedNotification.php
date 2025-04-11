@@ -40,8 +40,8 @@ class TicketCreatedNotification extends Notification
         return (new MailMessage)
             ->subject('Nuevo ticket creado.')
             ->line('Un nuevo ticket a sido creado por ' . $this->ticket->user)
-            ->line('Titulo del ticket ' . $this->ticket->title)
-            ->action('Ver ticket', url('/tickets/' . $this->ticket->id));
+            ->line('Titulo del ticket: ' . $this->ticket->title)
+            ->action('Ver ticket', url('/user/tickets/' . $this->ticket->id));
     }
 
 
