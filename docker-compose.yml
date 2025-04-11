@@ -68,6 +68,12 @@ services:
     command: sh -c "tail -f /dev/null" # mantiene el servicio activo para poder ejecutar npm cuando se requiera
     networks:
        - ${DOCKER_NETWORK}
+  servicemailpit:
+    container_name: mailpit
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025" # puerto SMTP
+      - "8025:8025" # interfaz web
 
 networks:
     red-app:

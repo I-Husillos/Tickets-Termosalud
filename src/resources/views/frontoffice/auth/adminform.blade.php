@@ -21,8 +21,5 @@
         <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
     </form>
 
-    <div class="text-center mt-4">
-        <button type="button" onclick="window.location.href='{{ route('home') }}';" class="btn btn-secondary">Volver a Inicio</button>
-    </div>
 </div>
 @endsection
