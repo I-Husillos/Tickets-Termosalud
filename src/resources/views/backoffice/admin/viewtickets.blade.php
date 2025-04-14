@@ -58,6 +58,7 @@
         </form>
     </div>
 
+    @if (Auth::guard('admin')->user()->superadmin) <!-- Solo si el usuario es un superadmin -->
     <div class="mt-4">
         <form action="{{ route('admin.assign.ticket', $ticket->id) }}" method="POST">
             @csrf
@@ -65,13 +66,16 @@
                 <label for="admin_id">Reasignar a Administrador</label>
                 <select name="admin_id" id="admin_id" class="form-control">
                     @foreach ($admins as $admin)
-                    <option value="{{ $admin->id }}" {{ $ticket->admin_id == $admin->id ? 'selected' : '' }}>{{ $admin->name }}</option>
+                        <option value="{{ $admin->id }}" {{ $ticket->admin_id == $admin->id ? 'selected' : '' }}>
+                            {{ $admin->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-warning mt-3">Reasignar</button>
         </form>
     </div>
+    @endif
 
     <div class="mt-5">
         <h4>Comentarios</h4>
@@ -125,4 +129,3 @@
     </div>
 </div>
 @endsection
-

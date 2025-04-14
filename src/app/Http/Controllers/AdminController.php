@@ -8,12 +8,18 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Notifications\TicketStatusChanged;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AdminController
+class AdminController extends Controller
 {
     Use Notifiable;
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
 
     public function showLoginForm()
     {
@@ -23,10 +29,14 @@ class AdminController
     public function dashboard()
     {
         $admin = Auth::guard('admin')->user();
+
+        $isSuperAdmin = $admin->superadmin;
+
         $notifications = $admin->notifications;
+        
         $tickets = Ticket::all();
         
-        return view('backoffice.admin.dashboard', compact('tickets','notifications'));
+        return view('backoffice.admin.dashboard', compact('tickets', 'notifications', 'isSuperAdmin'));
     }
 
 
@@ -110,6 +120,11 @@ class AdminController
 
     public function assignTicket(Request $request, Ticket $ticket)
     {
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin->superadmin) {
+            return redirect()->route('admin.dashboard')->with('error', 'No tienes permisos para reasignar tickets.');
+        }
         $validated = $request->validate([
             'admin'=>'required|exists:admins,id'
         ]);
