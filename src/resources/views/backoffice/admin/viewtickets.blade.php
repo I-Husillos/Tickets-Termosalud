@@ -11,22 +11,53 @@
         <li class="list-group-item"><strong>Estado:</strong> {{ ucfirst($ticket->status) }}</li>
         <li class="list-group-item"><strong>Prioridad:</strong> {{ ucfirst($ticket->priority) }}</li>
     </ul>
+    
     <div class="mt-4">
         <form action="{{ route('admin.update.ticket', $ticket->id) }}" method="POST">
             @csrf
             @method('PATCH')
+
+            @php
+                // Definir las transiciones válidas según el estado actual del ticket
+                $allowedStatusTransitions = match($ticket->status) {
+                    'new' => ['in_progress'],  // nuevo -> en curso
+                    'in_progress' => ['pending', 'resolved'],  // en curso -> pendiente | resuelto
+                    'pending' => ['in_progress'],  // pendiente -> en curso
+                    'resolved' => ['closed'],  // resuelto -> cerrado
+                    default => [],
+                };
+            @endphp
+
             <div class="form-group">
                 <label for="status">Actualizar Estado</label>
-                <select name="status" id="status" class="form-control">
-                    <option value="in_progress">En Curso</option>
-                    <option value="pending">Pendiente</option>
-                    <option value="resolved">Resuelto</option>
-                    <option value="closed">Cerrado</option>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="">Seleccionar...</option>
+                    @foreach($allowedStatusTransitions as $status)
+                        <option value="{{ $status }}" {{ $ticket->status == $status ? 'selected' : '' }}>
+                            {{ ucfirst(str_replace('_', ' ', $status)) }}
+                        </option>
+                    @endforeach
+                    <!-- Agregar la opción "resuelto" si el ticket no está resuelto aún -->
+                    @if ($ticket->status != 'resolved')
+                        <option value="resolved">Resolved</option>
+                    @endif
                 </select>
             </div>
-            <button type="submit" class="btn btn-success mt-3">Actualizar</button>
+
+            <div class="form-group mt-3">
+                <label for="priority">Actualizar Prioridad</label>
+                <select name="priority" id="priority" class="form-control">
+                    <option value="low" {{ $ticket->priority == 'low' ? 'selected' : '' }}>Baja</option>
+                    <option value="medium" {{ $ticket->priority == 'medium' ? 'selected' : '' }}>Media</option>
+                    <option value="high" {{ $ticket->priority == 'high' ? 'selected' : '' }}>Alta</option>
+                    <option value="critical" {{ $ticket->priority == 'critical' ? 'selected' : '' }}>Crítica</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">Actualizar Ticket</button>
         </form>
     </div>
+
     <div class="mt-4">
         <form action="{{ route('admin.assign.ticket', $ticket->id) }}" method="POST">
             @csrf
@@ -34,14 +65,13 @@
                 <label for="admin_id">Reasignar a Administrador</label>
                 <select name="admin_id" id="admin_id" class="form-control">
                     @foreach ($admins as $admin)
-                    <option value="{{ $admin->id }}">{{ $admin->name }}</option>
+                    <option value="{{ $admin->id }}" {{ $ticket->admin_id == $admin->id ? 'selected' : '' }}>{{ $admin->name }}</option>
                     @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-warning mt-3">Reasignar</button>
         </form>
     </div>
-
 
     <div class="mt-5">
         <h4>Comentarios</h4>
@@ -55,7 +85,7 @@
                         <th>Autor</th>
                         <th>Mensaje</th>
                         <th>Fecha</th>
-                        <th>Acciones</th> <!-- Opcional -->
+                        <th>Acciones</th> <!-- Opcional para eliminar comentarios -->
                     </tr>
                 </thead>
                 <tbody>
@@ -95,3 +125,4 @@
     </div>
 </div>
 @endsection
+

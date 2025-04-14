@@ -20,6 +20,11 @@
 
         <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
     </form>
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
 </div>
 @endsection

@@ -3,6 +3,12 @@
 @section('title', 'Listado de Tickets')
 
 @section('content')
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+@endif
 <div class="container mt-5">
     <h2 class="text-center">Mis Tickets</h2>
     
@@ -53,10 +59,14 @@
                     </tr>
                 @endforeach
             </tbody>
-        </table>
-        <a href="{{ route('user.notifications') }}" class="nav-link">Mis Notificaciones</a>
-
+        </table>   
     @endif
+    <a href="{{ route('user.notifications') }}" class="btn btn-warning">
+        Notificaciones 
+        @if (Auth::user()->unreadNotifications->count() > 0)
+            <span class="badge badge-danger">{{ Auth::user()->unreadNotifications->count() }}</span>
+        @endif
+    </a>
 
     <div class="d-flex justify-content-end mt-4">
         <form method="POST" action="{{ route('logout') }}">

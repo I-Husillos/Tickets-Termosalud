@@ -25,6 +25,8 @@ Route::middleware('auth:user')->prefix('user')->group(function() {
     Route::post('tickets/{ticket}/validate', [TicketController::class, 'validateResolution'])->name('user.tickets.validate');
 
     Route::get('notifications', [UserController::class, 'showNotificationsView'])->name('user.notifications');
+    Route::patch('notifications/{id}/read', [UserController::class, 'markAsRead'])->name('user.notifications.read');
+
     
 
     Route::post('logout', [UserController::class, 'logOut'])->name('logout');
@@ -39,11 +41,16 @@ Route::middleware('auth:admin')->prefix('admin')->group(function() {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('tickets', [AdminController::class, 'manageTickets'])->name('admin.manage.tickets');
     Route::get('tickets/{ticket}', [AdminController::class, 'viewTicket'])->name('admin.view.ticket');
+
+    Route::get('notifications', [AdminController::class, 'showNotifications'])->name('admin.notifications');
+    Route::patch('notifications/{notificationId}/read', [AdminController::class, 'markAsRead'])->name('admin.notifications.read');
+
     Route::patch('tickets/{ticket}/update', [AdminController::class, 'updateTicketStatus'])->name('admin.update.ticket');
     Route::post('tickets/{ticket}/assign', [AdminController::class, 'assignTicket'])->name('admin.assign.ticket');
     Route::post('tickets/{ticket}/comment', [CommentController::class, 'addComment'])->name('admin.add.comment');
     Route::delete('comments/{comment}', [CommentController::class, 'deleteComment'])->name('admin.delete.comment');
     Route::get('tickets/{ticket}/comments', [CommentController::class, 'viewComments'])->name('admin.view.comments');
+    Route::get('notifications', [AdminController::class, 'showNotifications'])->name('admin.notifications');
     Route::post('logout', [AdminController::class, 'logout'])->name('admin.logout');
 });
 

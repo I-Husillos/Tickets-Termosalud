@@ -29,6 +29,7 @@
         </form>
     @endif
 
+
     <div class="mt-4">
         <h4>Añadir un Comentario</h4>
         <form method="POST" action="{{ route('ticket.add.comment', $ticket->id) }}">

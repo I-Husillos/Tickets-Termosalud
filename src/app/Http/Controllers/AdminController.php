@@ -6,11 +6,14 @@ use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use App\Notifications\TicketStatusChanged;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController
 {
+    Use Notifiable;
 
     public function showLoginForm()
     {
@@ -45,7 +48,7 @@ class AdminController
             return redirect()->route('admin.dashboard')->with('success', 'Inicio de sesión exitoso.');
         }
 
-        return back()->withErrors(['email' => 'Credenciales incorrectas.']);
+        return back()->with('error', 'Correo o contraseña incorrectos.');
     
     }
 
@@ -127,9 +130,37 @@ class AdminController
 
         $ticket->update($validated);
 
+        $admin = Auth::guard('admin')->user();
+
+        $ticket->user->notify(new TicketStatusChanged($ticket, $admin));
+
         return redirect() -> route('admin.manage.tickets')->with('success', 'Ticket asignado correctamente.');
     }
 
+
+    public function showNotifications()
+    {
+        $admin = Auth::user();
+
+        $notifications = $admin->notifications;
+
+
+        return view('backoffice.admin.notifications.notifications', compact('notifications'));
+    }
+
+
+    public function markAsRead($notificationId)
+    {
+        $admin = Auth::guard('admin')->user();
+
+        $notification = $admin->notifications->find($notificationId);
+
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
+        return redirect()->route('admin.notifications');
+    }
 
     public function logout()
     {

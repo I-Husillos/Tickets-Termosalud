@@ -5,7 +5,12 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="text-center">Lista de Tickets</h2>
-    <a href="{{ route('admin.login') }}" onclick="return confirm('¿Estás seguro de que deseas cerrar sesión?');">Cerrar Sesión</a>
+    <div class="d-flex justify-content-end mt-4">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+        </form>
+    </div>
     <form method="GET" action="{{ route('admin.manage.tickets') }}" class="mt-4">
         <div class="form-row">
             <div class="col">
@@ -51,12 +56,21 @@
                 <td>{{ ucfirst($ticket->priority) }}</td>
                 <td>{{ $ticket->admin ? $ticket->admin->name : 'Sin Asignar' }}</td>
                 <td>
-                    <a href="{{ route('admin.view.ticket', $ticket->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('admin.view.ticket', $ticket->id) }}" class="btn btn-info btn-sm">Ver Acciones</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    <a href="{{ route('admin.notifications') }}" class="btn btn-warning">
+        Notificaciones 
+        @if (Auth::user()->unreadNotifications->count() > 0)
+            <span class="badge badge-danger">{{ Auth::user()->unreadNotifications->count() }}</span>
+        @endif
+    </a>
+    <div class="text-center mt-4">
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Volver al menú de principal</a>
+    </div>
 </div>
 
 @endsection

@@ -29,6 +29,16 @@
     <div class="text-center mt-4">
         <a href="{{ route('login') }}" class="btn btn-secondary">Volver al Inicio</a>
     </div>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </div>
 @endsection
 

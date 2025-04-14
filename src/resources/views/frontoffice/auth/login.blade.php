@@ -22,5 +22,12 @@
         <p>¿No tienes una cuenta? <a href="{{ route('register') }}">Regístrate aquí</a></p>
     </div>
 
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    @endif
+
 </div>
 @endsection
