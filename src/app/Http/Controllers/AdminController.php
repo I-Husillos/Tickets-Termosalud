@@ -14,12 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    Use Notifiable;
-
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    Use Notifiable;      
 
     public function showLoginForm()
     {
@@ -125,8 +120,9 @@ class AdminController extends Controller
         if (!$admin->superadmin) {
             return redirect()->route('admin.dashboard')->with('error', 'No tienes permisos para reasignar tickets.');
         }
+
         $validated = $request->validate([
-            'admin'=>'required|exists:admins,id'
+            'admin' => 'required|exists:admins,id',
         ]);
 
 
@@ -175,6 +171,16 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.notifications');
+    }
+
+
+    public function showAssignedTickets()
+    {
+        $admin = Auth::guard('admin')->user();
+
+        $assignedTickets = Ticket::where('admin_id', $admin->id)->get();
+
+        return view('backoffice.admin.assignedticketsview', compact('assignedTickets'));
     }
 
     public function logout()

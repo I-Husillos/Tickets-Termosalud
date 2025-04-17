@@ -64,7 +64,7 @@
             @csrf
             <div class="form-group">
                 <label for="admin_id">Reasignar a Administrador</label>
-                <select name="admin_id" id="admin_id" class="form-control">
+                <select name="admin" id="admin_id" class="form-control">
                     @foreach ($admins as $admin)
                         <option value="{{ $admin->id }}" {{ $ticket->admin_id == $admin->id ? 'selected' : '' }}>
                             {{ $admin->name }}

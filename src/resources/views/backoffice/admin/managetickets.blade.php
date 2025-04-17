@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h2 class="text-center">Lista de Tickets</h2>
     <div class="d-flex justify-content-end mt-4">
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('admin.logout') }}">
             @csrf
             <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
         </form>

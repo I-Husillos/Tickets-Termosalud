@@ -45,8 +45,12 @@ Route::middleware('auth:admin')->prefix('admin')->group(function() {
     Route::get('notifications', [AdminController::class, 'showNotifications'])->name('admin.notifications');
     Route::patch('notifications/{notificationId}/read', [AdminController::class, 'markAsRead'])->name('admin.notifications.read');
 
+
     Route::patch('tickets/{ticket}/update', [AdminController::class, 'updateTicketStatus'])->name('admin.update.ticket');
-    Route::post('/admin/ticket/{ticket}/assign', [TicketController::class, 'assignTicket'])->name('admin.assign.ticket');
+    Route::post('/admin/ticket/{ticket}/assign', [AdminController::class, 'assignTicket'])->name('admin.assign.ticket');
+    Route::get('/admin/tickets/assigned', [AdminController::class, 'showAssignedTickets'])->name('admin.show.assigned.tickets');
+
+    
     Route::post('tickets/{ticket}/comment', [CommentController::class, 'addComment'])->name('admin.add.comment');
     Route::delete('comments/{comment}', [CommentController::class, 'deleteComment'])->name('admin.delete.comment');
     Route::get('tickets/{ticket}/comments', [CommentController::class, 'viewComments'])->name('admin.view.comments');
