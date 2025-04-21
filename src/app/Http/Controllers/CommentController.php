@@ -9,7 +9,6 @@ use App\Models\Admin;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Notifications\TicketCommented;
 
 class CommentController
 {

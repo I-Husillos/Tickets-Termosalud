@@ -9,6 +9,7 @@ use App\Notifications\TicketCreatedNotification;
 use App\Notifications\TicketCommented;
 use App\Notifications\TicketStatusChanged;
 use App\Notifications\TicketClosed;
+use Illuminate\Support\Facades\Redis;
 
 class SendNotifications implements ShouldQueue
 {
