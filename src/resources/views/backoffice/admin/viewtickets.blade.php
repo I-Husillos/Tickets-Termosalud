@@ -37,10 +37,10 @@
                             {{ ucfirst(str_replace('_', ' ', $status)) }}
                         </option>
                     @endforeach
-                    <!-- Agregar la opción "resuelto" si el ticket no está resuelto aún -->
                     @if ($ticket->status != 'resolved')
                         <option value="resolved">Resolved</option>
                     @endif
+                    <option value="cancelled">Cancelled</option>
                 </select>
             </div>
 

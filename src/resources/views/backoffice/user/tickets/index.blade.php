@@ -59,8 +59,14 @@
                     </tr>
                 @endforeach
             </tbody>
-        </table>   
+        </table>
+        @if ($tickets->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $tickets->links('pagination::bootstrap-4') }}
+            </div>
+        @endif
     @endif
+
     <a href="{{ route('user.notifications') }}" class="btn btn-warning">
         Notificaciones 
         @if (Auth::user()->unreadNotifications->count() > 0)
@@ -76,4 +82,3 @@
     </div>
 </div>
 @endsection
-
