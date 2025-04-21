@@ -11,6 +11,9 @@ services:
       - DB_DATABASE=baseDatosMysql
       - DB_USERNAME=user
       - DB_PASSWORD=1234
+      - QUEUE_CONNECTION=redis
+      - REDIS_QUEUE_CONNECTION=default
+      - REDIS_QUEUE=notifications
     ports: 
       - "${DOCKER_PHP_PORT}:80"
     volumes:

@@ -31,5 +31,10 @@ class Ticket extends Model
         return $this->hasMany(Comment::class, 'ticket_id');
     }
 
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
+    }
+
 }
 

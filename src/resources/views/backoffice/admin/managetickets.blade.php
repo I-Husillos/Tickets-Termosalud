@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h2 class="text-center">Lista de Tickets</h2>
     <div class="d-flex justify-content-end mt-4">
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('admin.logout') }}">
             @csrf
             <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
         </form>
@@ -20,6 +20,7 @@
                     <option value="in_progress">In Progress</option>
                     <option value="resolved">Resolved</option>
                     <option value="closed">Closed</option>
+                    <option value="cancelled">Cancelled</option>
                 </select>
             </div>
             <div class="col">
@@ -44,7 +45,7 @@
                 <th>Estado</th>
                 <th>Prioridad</th>
                 <th>Asignado a</th>
-                <th>Acciones</th>
+                <th style="text-align: center;">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -58,10 +59,28 @@
                 <td>
                     <a href="{{ route('admin.view.ticket', $ticket->id) }}" class="btn btn-info btn-sm">Ver Acciones</a>
                 </td>
+                @if ($ticket->status === 'closed')
+                    <td>
+                        <form method="POST" action="{{ route('admin.reopen.ticket', $ticket->id) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm">Reabrir ticket</button>
+                        </form>
+                    </td>
+                @else
+                    <td>
+                        <form method="POST" action="{{ route('admin.close.ticket', $ticket->id) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-sm">Cerrar</button>
+                        </form>
+                    </td>
+                @endif
             </tr>
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mt-4">
+        {{ $tickets->links('pagination::bootstrap-4') }}
+    </div>
     <a href="{{ route('admin.notifications') }}" class="btn btn-warning">
         Notificaciones 
         @if (Auth::user()->unreadNotifications->count() > 0)

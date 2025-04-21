@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendNotifications;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Admin;
@@ -20,16 +21,16 @@ class CommentController
 
         $author = Auth::user();
 
-        $ticket->comments()->create([
+        $comment = $ticket->comments()->create([
             'author_id' => Auth::id(),
             'author_type' => Auth::user() instanceof Admin ? Admin::class : User::class,
             'message' => $validated['message'],
         ]);
 
         if ($author instanceof Admin && $ticket->user) {
-            $ticket->user->notify(new TicketCommented($ticket, $author));
+            SendNotifications::dispatch($ticket, 'commented', $comment);
         } elseif ($author instanceof User && $ticket->admin) {
-            $ticket->admin->notify(new TicketCommented($ticket, $author));
+            SendNotifications::dispatch($ticket, 'commented', $comment);
         }
 
         return redirect()->back()->with('success', 'Comentario agregado correctamente.');
@@ -40,11 +41,6 @@ class CommentController
         $comments = $ticket->comments()->with('author')->get();
         return view('backoffice.comments.index', compact('comments', 'ticket'));
     }
-
-    // public function updateState($ticket)
-    // {
-    //     $ticket->user->notify(new TicketCommentedNotification($ticket, auth()->user()));
-    // }
 
 
 

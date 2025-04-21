@@ -2,19 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendNotifications;
 use App\Models\Admin;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Notifications\TicketClosed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Notifications\TicketCreatedNotification;
+use Illuminate\Notifications\Notification;
+use PHPUnit\Framework\Attributes\Ticket as AttributesTicket;
 
 class TicketController
 {
-    
+    protected $ticket;
+
+    public function __construct(Ticket $ticket)
+    {
+        $this->ticket = $ticket;
+    }
+
+    public function handle()
+    {
+        foreach ($this->ticket as $ticket) {
+            $ticket->user->notify(new TicketCreatedNotification($ticket));
+        }
+    }
+
     public function showAll()
     {
-        $tickets = Auth::guard('user')->user()->tickets;
+        $tickets = Ticket::where('user_id', Auth::id())->latest()->paginate(5);
         return view('backoffice.user.tickets.index', compact('tickets'));
     }
 
@@ -39,11 +57,7 @@ class TicketController
         $ticket = Ticket::create($validated);
 
 
-        foreach(Admin::all() as $admin)
-        {
-            $admin->notify(new TicketCreatedNotification($ticket));
-        }
-
+        SendNotifications::dispatch($ticket, 'created');
 
         return redirect()->route('user.tickets.index')->with('success', 'Ticket creado con éxito.');
     }
@@ -81,4 +95,20 @@ class TicketController
         return redirect()->route('user.tickets.index')->with('success', 'Estado del ticket actualizado.');
     }
 
+    public function closeTicket(Request $request, Ticket $ticketId)
+    {
+        $ticketId->update(['status' => 'closed']);
+        
+        $ticketId->user->notify(new TicketClosed($ticketId));
+
+        return redirect()->route('admin.manage.tickets')->with('success', 'Ticket cerrado.');
+    }
+
+    public function reopenTicket(Request $request, Ticket $ticketId)
+    {
+        $ticketId->update(['status' => 'in_progress']);
+        return redirect()->route('admin.manage.tickets')->with('success', 'Ticket reabierto.');
+    }
+
 }
+

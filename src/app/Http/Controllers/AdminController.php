@@ -14,12 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    Use Notifiable;
-
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    Use Notifiable;      
 
     public function showLoginForm()
     {
@@ -84,7 +79,7 @@ class AdminController extends Controller
             $query->where('priority', $request->priority);
         }
 
-        $tickets = $query->get();
+        $tickets = $query->paginate(5);
 
         return view('backoffice.admin.managetickets', compact('tickets'));
     }
@@ -125,8 +120,9 @@ class AdminController extends Controller
         if (!$admin->superadmin) {
             return redirect()->route('admin.dashboard')->with('error', 'No tienes permisos para reasignar tickets.');
         }
+
         $validated = $request->validate([
-            'admin'=>'required|exists:admins,id'
+            'admin' => 'required|exists:admins,id',
         ]);
 
 
@@ -139,7 +135,7 @@ class AdminController extends Controller
     public function updateTicketStatus(Request $request, Ticket $ticket)
     {
         $validated = $request->validate([
-            'status' => 'required|in:new,in_progress,pending,resolved,closed',
+            'status' => 'required|in:new,in_progress,pending,resolved,closed,cancelled',
             'priority' => 'nullable|in:low,medium,high,critical',
         ]);
 
@@ -176,6 +172,29 @@ class AdminController extends Controller
 
         return redirect()->route('admin.notifications');
     }
+
+
+    public function showAssignedTickets(Request $request)
+    {
+        $admin = Auth::guard('admin')->user();
+
+        $query = Ticket::where('admin_id', $admin->id);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        $assignedTickets = $query->paginate(5);
+
+        return view('backoffice.admin.assignedticketsview', compact('assignedTickets'));
+    }
+
+    
+
 
     public function logout()
     {
