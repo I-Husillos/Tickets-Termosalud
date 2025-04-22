@@ -36,5 +36,10 @@ class Ticket extends Model
         return $this->belongsTo(Admin::class, 'admin_id');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
+
 }
 

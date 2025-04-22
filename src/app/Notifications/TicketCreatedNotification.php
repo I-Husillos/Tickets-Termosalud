@@ -45,7 +45,7 @@ class TicketCreatedNotification extends Notification
     }
 
 
-    public function toDataBase(object $notifiable)
+    public function toDatabase(object $notifiable)
     {
         return [
             'ticket_id' => $this->ticket->id,

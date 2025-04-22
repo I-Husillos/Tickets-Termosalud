@@ -39,10 +39,10 @@ class TicketStatusChanged extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Cambio en el estado de tu ticket')
-            ->line('El estado de tu ticket ha sido actualizado por el admin ' . $this->admin->name)
-            ->line('Nuevo estado: ' . $this->ticket->status)
-            ->action('Ver Ticket', url('/user/tickets/' . $this->ticket->id));
+            ->subject('Ticket Cerrado: ' . $this->ticket->title)
+            ->line('El ticket con el título "' . $this->ticket->title . '" ha sido cerrado por el administrador ' . $this->admin->name . '.')
+            ->action('Ver Ticket', url('/user/tickets/' . $this->ticket->id))
+            ->line('Gracias por usar nuestra aplicación.');
     }
 
     /**

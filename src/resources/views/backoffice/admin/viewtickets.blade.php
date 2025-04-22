@@ -27,10 +27,10 @@
                     default => [],
                 };
             @endphp
-
+            
             <div class="form-group">
                 <label for="status">Actualizar Estado</label>
-                <select name="status" id="status" class="form-control" required>
+                <select name="status" id="status" class="form-control">
                     <option value="">Seleccionar...</option>
                     @foreach($allowedStatusTransitions as $status)
                         <option value="{{ $status }}" {{ $ticket->status == $status ? 'selected' : '' }}>
@@ -41,6 +41,16 @@
                         <option value="resolved">Resolved</option>
                     @endif
                     <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="priority">Actualizar Tipo</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="bug" {{ $ticket->type == 'bug' ? 'selected' : '' }}>Bug</option>
+                    <option value="improvement" {{ $ticket->type == 'improvement' ? 'selected' : '' }}>Improvement</option>
+                    <option value="request" {{ $ticket->type == 'request' ? 'selected' : '' }}>Request</option>
+                    <option value="other">Other</option> <!-- Siempre muestra la opción Other -->
                 </select>
             </div>
 
@@ -128,4 +138,7 @@
         <a href="{{ route('admin.manage.tickets') }}" class="btn btn-secondary">Volver al menú de gestión</a>
     </div>
 </div>
+
 @endsection
+
+

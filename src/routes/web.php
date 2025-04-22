@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'showOptions']) -> name('login');
@@ -38,6 +39,20 @@ Route::get('/admin/login', [AdminController::class, 'showLoginForm']) -> name('a
 Route::post('/admin/login', [AdminController::class, 'login']) -> name('admin.login.submit');
 
 Route::middleware('auth:admin')->prefix('admin')->group(function() {
+    
+    Route::get('types', [TypeController::class, 'index'])->name('admin.types.index');//mostrar todos los tipos de tickets
+    
+    Route::get('types/create', [TypeController::class, 'create'])->name('admin.types.create');//mostrar formulario para crear un nuevo tipo de ticket
+    
+    Route::post('types', [TypeController::class, 'store'])->name('admin.types.store');//guardar un nuevo tipo de ticket
+
+    Route::get('types/{id}/edit', [TypeController::class, 'edit'])->name('admin.types.edit');//mostrar formulario para editar un tipo de ticket
+    
+    Route::put('types/{id}', [TypeController::class, 'update'])->name('admin.types.update');//actualizar un tipo de ticket
+    
+    Route::delete('types/{id}', [TypeController::class, 'destroy'])->name('admin.types.destroy');//eliminar un tipo de ticket
+
+
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('tickets', [AdminController::class, 'manageTickets'])->name('admin.manage.tickets');
     Route::get('tickets/{ticket}', [AdminController::class, 'viewTicket'])->name('admin.view.ticket');

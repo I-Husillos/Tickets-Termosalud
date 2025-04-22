@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Notifications\TicketCreatedNotification;
-use Illuminate\Notifications\Notification;
-use PHPUnit\Framework\Attributes\Ticket as AttributesTicket;
 
 class TicketController
 {
@@ -57,7 +55,7 @@ class TicketController
         $ticket = Ticket::create($validated);
 
 
-        SendNotifications::dispatch($ticket, 'created');
+        SendNotifications::dispatch($ticket->id, 'created');
 
         return redirect()->route('user.tickets.index')->with('success', 'Ticket creado con éxito.');
     }
@@ -98,8 +96,10 @@ class TicketController
     public function closeTicket(Request $request, Ticket $ticketId)
     {
         $ticketId->update(['status' => 'closed']);
+
+        $admin = Auth::guard('admin')->user();
         
-        $ticketId->user->notify(new TicketClosed($ticketId));
+        SendNotifications::dispatch($ticketId->id, 'closed', $admin->id);
 
         return redirect()->route('admin.manage.tickets')->with('success', 'Ticket cerrado.');
     }

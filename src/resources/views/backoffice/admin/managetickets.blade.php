@@ -44,6 +44,7 @@
                 <th>Título</th>
                 <th>Estado</th>
                 <th>Prioridad</th>
+                <th>Tipo</th>
                 <th>Asignado a</th>
                 <th style="text-align: center;">Acciones</th>
             </tr>
@@ -55,6 +56,7 @@
                 <td>{{ $ticket->title }}</td>
                 <td>{{ ucfirst($ticket->status) }}</td>
                 <td>{{ ucfirst($ticket->priority) }}</td>
+                <td>{{ ucfirst($ticket->type) }}</td>
                 <td>{{ $ticket->admin ? $ticket->admin->name : 'Sin Asignar' }}</td>
                 <td>
                     <a href="{{ route('admin.view.ticket', $ticket->id) }}" class="btn btn-info btn-sm">Ver Acciones</a>

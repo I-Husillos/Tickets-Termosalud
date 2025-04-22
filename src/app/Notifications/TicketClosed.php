@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Models\Admin;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,12 +13,16 @@ class TicketClosed extends Notification
 {
     use Queueable;
 
+    protected $ticket;
+    protected $admin;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Ticket $ticket, Admin $admin)
     {
-        //
+        $this->ticket = $ticket;
+        $this->admin = $admin;
     }
 
     /**
@@ -35,9 +41,10 @@ class TicketClosed extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('Ticket Cerrado: ' . $this->ticket->title)
+            ->line('El ticket con el título "' . $this->ticket->title . '" ha sido cerrado por el administrador ' . $this->admin->name . '.')
+            ->action('Ver Ticket', url('/user/tickets/' . $this->ticket->id))
+            ->line('Gracias por usar nuestra aplicación.');
     }
 
     /**

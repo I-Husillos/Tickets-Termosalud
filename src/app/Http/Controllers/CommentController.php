@@ -27,10 +27,10 @@ class CommentController
         ]);
 
         if ($author instanceof Admin && $ticket->user) {
-            SendNotifications::dispatch($ticket, 'commented', $comment);
+            SendNotifications::dispatch($ticket->id, 'commented', $comment);
         } elseif ($author instanceof User && $ticket->admin) {
-            SendNotifications::dispatch($ticket, 'commented', $comment);
-        }
+            SendNotifications::dispatch($ticket->id, 'user_commented', $comment);
+        }        
 
         return redirect()->back()->with('success', 'Comentario agregado correctamente.');
     }
@@ -50,3 +50,6 @@ class CommentController
         return redirect()->back()->with('success', 'Comentario eliminado correctamente.');
     }
 }
+
+
+//php artisan queue:work redis
