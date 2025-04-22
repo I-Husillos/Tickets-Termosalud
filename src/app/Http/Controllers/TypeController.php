@@ -20,44 +20,20 @@ class TypeController
         return view('backoffice.types.create');
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required',
         ]);
-    
-        $type = new Type();
-        $type->name = $request->name;
-        $type->save();
-    
-        if ($request->filled('ticket_id')) {
-            $ticket = Ticket::find($request->ticket_id);
-            if ($ticket) {
-                $ticket->type = $type->name;
-                $ticket->save();
-            }
-
-            if($request->filled('type') == 'other'){
-                return redirect()->route('admin.types.index')->with('ticket_id', $ticket->id);
-            }
-    
-            return redirect()->route('admin.view.ticket', $ticket->id)
-                ->with('success', 'Tipo personalizado creado y asignado al ticket.');
-        }
-    
-        return redirect()->route('admin.types.index')
-            ->with('success', 'Tipo de ticket creado correctamente.');
+        Type::create($request->all());
+        return redirect()->route('admin.types.index')->with('success', 'Tipo de ticket creado con éxito');
     }
     
 
-    public function edit($id)
+    public function edit()
     {
-        $type = Type::find($id);
-
-        if (!$type) {
-            return redirect()->route('admin.types.index')->with('error', 'Tipo de ticket no encontrado');
-        }
-        return view('backoffice.types.edit', compact('type'));
+        
     }
 
     public function updateTicketStatus(Request $request, Ticket $ticket)
