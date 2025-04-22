@@ -23,6 +23,9 @@
                     <option value="cancelled">Cancelled</option>
                 </select>
             </div>
+
+            <div class="mt-2"></div>
+
             <div class="col">
                 <select name="priority" class="form-control">
                     <option value="">Prioridad</option>
@@ -32,6 +35,9 @@
                     <option value="critical">Critical</option>
                 </select>
             </div>
+
+            <div class="mt-2"></div>
+
             <div class="col">
                 <button type="submit" class="btn btn-primary">Filtrar</button>
             </div>

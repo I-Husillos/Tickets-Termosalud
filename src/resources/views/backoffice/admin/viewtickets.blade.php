@@ -122,10 +122,24 @@
                 <div class="mt-4"></div>
 
                 <div class="form-group">
+<<<<<<< HEAD
                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
         </div>
+=======
+                    <form method="POST" action="{{ route('admin.update.ticket', $ticket->id) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+        <div class="text-center mt-5">
+                <a href="{{ route('admin.manage.tickets') }}" class="btn btn-secondary">Volver al menú de principal</a>
+            </div>
+>>>>>>> 06f6426 (si)
     </div>
 </div>
 @endsection
