@@ -36,6 +36,10 @@ class TypeController
                 $ticket->type = $type->name;
                 $ticket->save();
             }
+
+            if($request->filled('type') == 'other'){
+                return redirect()->route('admin.types.index')->with('ticket_id', $ticket->id);
+            }
     
             return redirect()->route('admin.view.ticket', $ticket->id)
                 ->with('success', 'Tipo personalizado creado y asignado al ticket.');

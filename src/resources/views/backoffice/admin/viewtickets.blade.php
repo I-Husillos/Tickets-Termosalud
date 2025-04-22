@@ -122,6 +122,7 @@
                 <div class="mt-4"></div>
 
                 <div class="form-group">
+                    
                     <form method="POST" action="{{ route('admin.update.ticket', $ticket->id) }}">
                         @csrf
                         @method('PATCH')
@@ -131,8 +132,8 @@
             </form>
         </div>
         <div class="text-center mt-5">
-                <a href="{{ route('admin.manage.tickets') }}" class="btn btn-secondary">Volver al menú de principal</a>
-            </div>
+            <a href="{{ route('admin.manage.tickets') }}" class="btn btn-secondary">Volver al menú de principal</a>
+        </div>
     </div>
 </div>
 @endsection
